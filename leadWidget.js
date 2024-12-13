@@ -3,7 +3,8 @@ class LeadWidget {
         const css = document.createElement("link");
         css.rel = "stylesheet";
         // css.href = `https://lead-widget.vercel.app/leadWidget.css` || `leadWidget.css`;
-        // css.href = `leadWidget.css`
+        css.href = `leadWidget.css`
+        document.head.appendChild(css)
 
         const parsedData = JSON.parse(window.atob(encrypted));
 
