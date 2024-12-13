@@ -1,3 +1,6 @@
+require("dotenv").config()
+console.log(process.env.MY_NAME);
+
 class LeadWidget {
     constructor(encrypted) {
         const css = document.createElement("link");
