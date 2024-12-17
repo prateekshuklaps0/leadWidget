@@ -243,11 +243,11 @@ ${field?.options?.map(option => `<option value="${option?.uuid}">${option?.label
             submitButton.innerHTML = `<span class="loader"></span>`
             this.resErrorElement.innerHTML = ""
             try {
-                const res = await fetch(this.submitApiData?.api_Url, {
+                const res = await fetch(`${this.submitApiData?.api_Url_origin}${this.submitApiData?.api_Url}`, {
                     method: this.submitApiData?.method?.toUpperCase(),
                     headers: {
                         "Content-Type": "application/json",
-                        'Access-Control-Allow-Origin': "http://localhost:2024",
+                        'Access-Control-Allow-Origin': this.submitApiData?.api_Url_origin,
                         'Access-Control-Allow-Methods': "POST, GET",
                         'Access-Control-Allow-Headers': 'pragma',
                         'Access-Control-Max-Age': 1728000
@@ -256,17 +256,17 @@ ${field?.options?.map(option => `<option value="${option?.uuid}">${option?.label
                 })
                 if (!res.ok) {
                     console.log("!response.ok error :", res);
-                    this.resErrorElement.innerHTML = "Given email already exists!"
+                    this.resErrorElement.innerHTML = res?.type == "cors" ? "Given email already exists!" : "Something went wrong while submitting the data!"
                     throw new Error(res?.message || res?.statusText);
                 }
                 const data = await res.json()
 
-                console.log("Widget data submitted :", data?.data);
+                console.log("Widget data submitted :", data?.data)
 
                 const { programSlug, formId, userId } = data?.data || {}
 
                 const reDirectUrl = this.thankYouPageData?.isRedirect ? this.thankYouPageData?.websiteUrl :
-                    `${this.submitApiData?.lead_link_domain}${this.submitApiData?.lead_link_subroute}/${programSlug}/${formId}?t=0&u=${userId}`;
+                    `${this.submitApiData?.lead_link_domain}${this.submitApiData?.lead_link_subroute}/${programSlug}/${formId}?t=0&u=${userId}`
 
                 // console.log("reDirectUrl", reDirectUrl);
 
@@ -274,7 +274,7 @@ ${field?.options?.map(option => `<option value="${option?.uuid}">${option?.label
 
                 submitButton.innerHTML = "Submit"
             } catch (error) {
-                console.log("Failed to submit widget data :", error);
+                console.log("Failed to submit widget data :", error)
                 submitButton.innerHTML = "Submit"
             }
         }
@@ -285,6 +285,6 @@ ${field?.options?.map(option => `<option value="${option?.uuid}">${option?.label
 
         this.iFrameDiv.append(divContainingFields, submitButton, this.resErrorElement);
 
-        console.log("Widget iframe loaded");
+        console.log("Widget iframe loaded",);
     }
 }
