@@ -1,1 +1,290 @@
-class LeadWidget{constructor(e){const t=document.createElement("link");t.rel="stylesheet",t.href="https://lead-widget.vercel.app/leadWidget.css",document.head.appendChild(t);const i=JSON.parse(window.atob(e));for(let e in i)this[e]=i[e];this.iFrameDiv=document.querySelector(`.frame-${this.widgetData?.uuid}`),this.iframeInit()}fieldInpVals={};createElement=(e,t={},i={})=>{const a=document.createElement(e);Object.assign(a.style,t);for(const e in i)a.setAttribute(e,i[e]);return a};showError=(e,t)=>{e.classList.add("visible"),e.textContent=t};createLabel=({text:e,styles:t={},...i})=>{const a=this.createElement("label",t,{...i});return a.textContent=e,a};createButton=({text:e,styles:t={},onClick:i,...a})=>{const n=this.createElement("button",t,{...a});return n.textContent=e,n.onclick=i,n};createParagraph=(e,t={},i={})=>{const a=this.createElement("p",t);a.textContent=e;for(const e in i)a.setAttribute(e,i[e]);return a};getFieldType=e=>{switch(e){case"telephone":case"phone":return"number";case"calendar":return"date";case"textbox":return"text";case"dropdown":return"select";case"fileUpload":return"file";default:return e}};createRadioInp=e=>{const t=this.createElement("div",{},{class:"radio-cont-div"});return t.innerHTML=e?.options?.map((t=>`<input type="radio" name="${e?.uuid}" value="${t?.uuid}" id="" class="radio-opts"><p>${t?.label}</p>`)).join(""),t.onchange=e=>{const{name:t,value:i}=e.target;this.fieldInpVals={...this.fieldInpVals,[t]:i}},t};createCheckboxInp=e=>{const t=this.createElement("div",{},{class:"radio-cont-div"});return t.innerHTML=e?.options?.map((t=>`<input type="checkbox" name="${e?.uuid}" value="${t?.uuid}" id="" class="checkbox-opts"><p>${t?.label}</p>`)).join(""),t.onchange=e=>{const{name:t,value:i,checked:a}=e.target;this.fieldInpVals={...this.fieldInpVals,[t]:a?[...this.fieldInpVals[t]||[],i]:[...(this.fieldInpVals[t]||[]).filter((e=>e!=i))]}},t};createSelectInp=e=>{const t=this.createElement("select",{},{name:e?.uuid||"",placeholder:e?.placeholder||"Select Option",required:e?.isRequired||!1});return t.innerHTML=`<option value="">${e?.placeholder||"Select Option"}</option>\n${e?.options?.map((e=>`<option value="${e?.uuid}">${e?.label}</option>`)).join("")}`,t.onchange=e=>{const{name:t,value:i}=e.target;this.fieldInpVals={...this.fieldInpVals,[t]:i}},t};createInput(e,t){const i="textarea"==t,a=this.createElement(i?"textarea":"input",{},{type:t,name:e?.uuid||"",placeholder:e?.placeholder||"",required:e?.isRequired||!1});return a.onchange=e=>{const{name:t,value:i}=e.target;this.fieldInpVals={...this.fieldInpVals,[t]:i}},a}createFileInp=e=>{const t=this.createElement("input",{},{type:"file",name:e?.uuid||"",placeholder:e?.placeholder||"",required:e?.isRequired||!1});return t.onchange=e=>{const{name:t,value:i}=e.target;this.fieldInpVals={...this.fieldInpVals,[t]:{fileName:i,value:i}}},t};renderFields(){const e=this.createElement("div",{},{class:"fields-Cont"});return Array.isArray(this.fieldsData)?(this.fieldsData.forEach(((t,i)=>{const a=this.createElement("div",{},{class:"field-item-div"}),n=this.createLabel({text:t?.label||""});let s;const l=this.getFieldType(t?.type);"radio"==l?s=this.createRadioInp(t):"checkbox"==l?s=this.createCheckboxInp(t):"select"==l?s=this.createSelectInp(t):"file"==l?s=this.createFileInp(t):["textarea","text","number","email","date"].includes(l)?s=this.createInput(t,l):"otp"==l?s=this.createInput(t,"number"):(console.log("field",t),s=this.createInput(t,l)),a.append(n,s),e.appendChild(a)})),e):console.error("`this.fieldsData` is not an array or is :",this.fieldsData)}async iframeInit(){const e=this.renderFields(),t=this.createButton({text:"Submit",type:"submit",class:"iframeBtn"});t.addEventListener("click",(async()=>{this.fieldsData?.map((e=>{let t={fieldUuid:e?.uuid,label:e?.label};const i=this.getFieldType(e?.type);return["select","radio"].includes(i)?t.selectedOptions=e?.options?.filter((t=>t.uuid==this.fieldInpVals[e?.uuid])):"file"==i?t.value=this.fieldInpVals[e?.uuid]||{}:"checkbox"==i?t.selectedOptions=(this.fieldInpVals[e?.uuid]||[]).map((t=>e?.options?.find((e=>e?.uuid==t)))):t.value=(this.fieldInpVals[e?.uuid]||"").trim(),t})),this.theme,this.formData,this.programData,this.thankYouPageData,this.widgetData;t.innerHTML='<span class="loader"></span>';try{const e=await fetch("http://localhost:2024/api/widgets/allWidgetDetails",{method:"GET",headers:{"Content-Type":"application/json",authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsIm9yZ2FuaXphdGlvbklkIjoyNywic3R1ZGVudElkIjoiNDBmMzM1MTMtZTBiMC00MjFlLWEzNDItOTM4ZmE2NWEzNjFlIiwibmFtZSI6IkFkYXJzaCBDaGFrcmFib3J0eSIsImVtYWlsIjoiYWRhcnNoY2hhazEwOEBnbWFpbC5jb20iLCJ1c2VyTW9iaWxlTnVtYmVyIjo5OTI3OTY4NDUxLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE3MzQxNTU5NDEsImV4cCI6MTczNDc2MDc0MX0.u7s0puemiDCjbl3br6Vzzjy1jDUBCThm7WbJNuHtEKo"}});if(!e.ok)throw new Error(e?.message||e?.statusText);const i=await e.json();console.log("Widget data submitted:",i),window.open(this.thankYouPageData?.isRedirect?this.thankYouPageData?.websiteUrl:`https://lead.mastersunion.org/student/application/${this.programData?.slug}/${this.formData?.uuid}?t=1`,"_blank"),t.innerHTML="Submit"}catch(e){console.log("Failed to submit widget data :",e),t.innerHTML="Submit"}})),this.iFrameDiv.classList="iFrameWidgetDiv",this.iFrameDiv.append(e,t),console.log("Widget iframe loaded")}}
+class LeadWidget {
+    constructor(encrypted) {
+        const css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.href = `https://lead-widget.vercel.app/leadWidget.css`;
+        // css.href = `leadWidget.css`
+        document.head.appendChild(css)
+
+        const parsedData = JSON.parse(window.atob(encrypted));
+
+        // console.log("parsedData", parsedData);
+
+        for (let key in parsedData) {
+            this[key] = parsedData[key]
+        };
+
+        this.iFrameDiv = document.querySelector(`.frame-${this.widgetData?.uuid}`);
+
+        this.resErrorElement = document.createElement("p")
+        this.resErrorElement.setAttribute("class", "res-error")
+
+        this.iframeInit()
+    }
+
+    fieldInpVals = {}
+
+    // To create a DOM element with specified styles and attributes
+    createElement = (tag, styles = {}, attributes = {}) => {
+        const element = document.createElement(tag);
+        Object.assign(element.style, styles);
+        for (const key in attributes) {
+            element.setAttribute(key, attributes[key]);
+        }
+        return element;
+    }
+
+    // To show error message
+    showError = (element, message) => {
+        element.classList.add("visible");
+        element.textContent = message;
+    }
+
+    // To create and append a label with specified text and styles
+    createLabel = ({ text, styles = {}, ...rest }) => {
+        const label = this.createElement("label", styles, { ...rest });
+        label.textContent = text;
+        return label;
+    }
+
+    // To create and append a button with specified text and styles
+    createButton = ({ text, styles = {}, onClick, ...rest }) => {
+        const button = this.createElement("button", styles, { ...rest });
+        button.textContent = text;
+        button.onclick = onClick;
+        return button;
+    }
+
+    // To create and append a paragraph with specified text and styles
+    createParagraph = (text, styles = {}, attributes = {}) => {
+        const paragraph = this.createElement("p", styles);
+        paragraph.textContent = text;
+        for (const key in attributes) {
+            paragraph.setAttribute(key, attributes[key]);
+        }
+        return paragraph;
+    }
+
+    // To manipulate field types
+    getFieldType = type => {
+        switch (type) {
+            case "telephone": case "phone":
+                return "number";
+            case "calendar":
+                return "date";
+            case "textbox":
+                return "text";
+            case "dropdown":
+                return "select";
+            case "fileUpload":
+                return "file";
+            default: return type;
+        }
+    }
+
+    // To create radio tag
+    createRadioInp = field => {
+        const radioCont = this.createElement("div", {}, { class: `radio-cont-div` });
+        radioCont.innerHTML = field?.options?.map(option => `<input type="radio" name="${field?.uuid}" value="${option?.uuid}" id="" class="radio-opts"><p>${option?.label}</p>`).join("")
+        radioCont.onchange = e => {
+            const { name, value } = e.target
+            this.fieldInpVals = { ...this.fieldInpVals, [name]: value }
+            this.resErrorElement.innerHTML = ""
+        }
+        return radioCont
+    }
+
+    // To create checkbox tag
+    createCheckboxInp = field => {
+        const checkboxCont = this.createElement("div", {}, { class: `radio-cont-div` });
+        checkboxCont.innerHTML = field?.options?.map(option => `<input type="checkbox" name="${field?.uuid}" value="${option?.uuid}" id="" class="checkbox-opts"><p>${option?.label}</p>`).join("")
+        checkboxCont.onchange = e => {
+            const { name, value, checked } = e.target
+            this.fieldInpVals = { ...this.fieldInpVals, [name]: checked ? [...(this.fieldInpVals[name] || []), value] : [...(this.fieldInpVals[name] || []).filter(item => item != value)] }
+            this.resErrorElement.innerHTML = ""
+        }
+        return checkboxCont
+    }
+
+    // To create select tag
+    createSelectInp = field => {
+        const selectCont = this.createElement("select", {}, {
+            name: field?.uuid || "",
+            placeholder: field?.placeholder || "Select Option",
+            required: field?.isRequired || false,
+        })
+        selectCont.innerHTML = `<option value="">${field?.placeholder || "Select Option"}</option>
+${field?.options?.map(option => `<option value="${option?.uuid}">${option?.label}</option>`).join("")}`
+        selectCont.onchange = e => {
+            const { name, value } = e.target
+            this.fieldInpVals = { ...this.fieldInpVals, [name]: value }
+            this.resErrorElement.innerHTML = ""
+        }
+        return selectCont
+    }
+
+    // To create input tag based on field type
+    createInput(field, type) {
+        const isTextarea = type == "textarea"
+        const inp = this.createElement(isTextarea ? "textarea" : "input", {}, {
+            type,
+            name: field?.uuid || "",
+            placeholder: field?.placeholder || "",
+            required: field?.isRequired || false,
+        })
+        inp.onchange = e => {
+            const { name, value } = e.target
+            this.fieldInpVals = { ...this.fieldInpVals, [name]: value }
+            this.resErrorElement.innerHTML = ""
+        }
+        return inp
+    }
+
+    // To create file upload input
+    createFileInp = field => {
+        const fileInp = this.createElement("input", {}, {
+            type: "file",
+            name: field?.uuid || "",
+            placeholder: field?.placeholder || "",
+            required: field?.isRequired || false,
+        });
+        fileInp.onchange = e => {
+            const { name, value } = e.target
+            this.fieldInpVals = { ...this.fieldInpVals, [name]: { fileName: value, value } }
+            this.resErrorElement.innerHTML = ""
+        }
+        return fileInp
+    }
+
+    // To render input fields
+    renderFields() {
+        const fieldsContainer = this.createElement("div", {}, { class: "fields-Cont", })
+        if (!Array.isArray(this.fieldsData)) return console.error("`this.fieldsData` is not an array or is :", this.fieldsData);
+
+        this.fieldsData.forEach((field, index) => {
+            const fieldElement = this.createElement("div", {}, { class: `field-item-div` });
+
+            const label = this.createLabel({ text: field?.label || "" });
+
+            let input;
+            const fieldType = this.getFieldType(field?.type)
+            if (fieldType == "radio") {
+                input = this.createRadioInp(field);
+            } else if (fieldType == "checkbox") {
+                input = this.createCheckboxInp(field);
+            } else if (fieldType == "select") {
+                input = this.createSelectInp(field);
+            } else if (fieldType == "file") {
+                input = this.createFileInp(field);
+            } else if (["textarea", "text", "number", "email", "date"].includes(fieldType)) {
+                input = this.createInput(field, fieldType);
+            } else if (fieldType == "otp") {
+                input = this.createInput(field, "number");
+            } else {
+                console.log("field", field);
+                input = this.createInput(field, fieldType);
+            }
+
+
+            fieldElement.append(label, input);
+
+            fieldsContainer.appendChild(fieldElement);
+        });
+
+        return fieldsContainer
+    }
+
+    // iFrame initialization ----------------------------------------------------------------------
+    async iframeInit() {
+        // Div containing fields
+        const divContainingFields = this.renderFields();
+
+        // Submit button
+        const submitButton = this.createButton({
+            text: "Submit",
+            type: "submit",
+            class: "iframeBtn"
+        });
+
+        // handle widget response submit
+        const handleSubmit = async () => {
+            const fieldpayload = this.fieldsData?.map((item) => {
+                let obj = {
+                    fieldUuid: item?.uuid,
+                    label: item?.label,
+                }
+                const fieldType = this.getFieldType(item?.type)
+                if (["select", "radio"].includes(fieldType)) {
+                    obj.selectedOptions = item?.options?.filter((ite) => ite.uuid == this.fieldInpVals[item?.uuid])
+                } else if (fieldType == "file") {
+                    obj.value = this.fieldInpVals[item?.uuid] || {}
+                } else if (fieldType == "checkbox") {
+                    obj.selectedOptions = (this.fieldInpVals[item?.uuid] || []).map(ite => item?.options?.find((op) => op?.uuid == ite))
+                } else {
+                    obj.value = (this.fieldInpVals[item?.uuid] || "").trim()
+                }
+
+                return obj
+            })
+
+            const payload = {
+                theme: this.theme || "",
+                formData: this.formData || {},
+                programData: this.programData || {},
+                thankYouPageData: this.thankYouPageData || {},
+                widgetData: this.widgetData || {},
+                fieldsData: fieldpayload,
+            }
+
+            // console.log("payload", JSON.stringify(payload, null, 2))
+            // console.log("fieldInpVals", this.fieldInpVals)
+            // console.log("fieldsData", this.fieldsData)
+
+            submitButton.innerHTML = `<span class="loader"></span>`
+            this.resErrorElement.innerHTML = ""
+            try {
+                const res = await fetch(this.submitApiData?.api_Url, {
+                    method: this.submitApiData?.method?.toUpperCase(),
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Access-Control-Allow-Origin': "http://localhost:2024",
+                        'Access-Control-Allow-Methods': "POST, GET",
+                        'Access-Control-Allow-Headers': 'pragma',
+                        'Access-Control-Max-Age': 1728000
+                    },
+                    body: JSON.stringify(payload),
+                })
+                if (!res.ok) {
+                    console.log("!response.ok error :", res);
+                    this.resErrorElement.innerHTML = "Given email already exists!"
+                    throw new Error(res?.message || res?.statusText);
+                }
+                const data = await res.json()
+
+                console.log("Widget data submitted :", data?.data);
+
+                const { programSlug, formId, userId } = data?.data || {}
+
+                const reDirectUrl = this.thankYouPageData?.isRedirect ? this.thankYouPageData?.websiteUrl :
+                    `${this.submitApiData?.lead_link_domain}${this.submitApiData?.lead_link_subroute}/${programSlug}/${formId}?t=0&u=${userId}`;
+
+                // console.log("reDirectUrl", reDirectUrl);
+
+                window.location.href = reDirectUrl
+
+                submitButton.innerHTML = "Submit"
+            } catch (error) {
+                console.log("Failed to submit widget data :", error);
+                submitButton.innerHTML = "Submit"
+            }
+        }
+
+        submitButton.addEventListener("click", handleSubmit)
+
+        this.iFrameDiv.classList = "iFrameWidgetDiv"
+
+        this.iFrameDiv.append(divContainingFields, submitButton, this.resErrorElement);
+
+        console.log("Widget iframe loaded");
+    }
+}
