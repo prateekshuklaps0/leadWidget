@@ -74,8 +74,8 @@
     --error2: #ee7b78;
     --error3: #c11d19;
 
-    --nuetral14: #36363E;
     --nuetral13: #5a5a5a;
+    --nuetral14: #36363E;
 
     /* tetr */
     --TetrGreen: #1C291B;
@@ -119,7 +119,9 @@
         font-family: var(--inter);
         flex-grow: 1;
 
-        input {
+        select,
+        input,
+        textarea {
             background: var(--nuetral13);
             border-color: var(--nuetral13);
             color: var(--grey10);
@@ -225,7 +227,9 @@
         position: relative;
         overflow: hidden;
 
-        input {
+        select,
+        input,
+        textarea {
             background: var(--white);
             color: var(--black3);
             border: none;
@@ -237,6 +241,24 @@
 
         label {
             color: var(--white);
+        }
+
+
+        .radio-cont-div {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            .radio-options-cont {
+                display: flex;
+                align-items: center;
+                gap: 3px;
+
+                p {
+                    color: white;
+                    font-size: 14px;
+                }
+            }
         }
     }
 
@@ -266,7 +288,10 @@
     background: var(--white1);
 
     .field-item-div {
-        input {
+
+        select,
+        input,
+        textarea {
             background: white !important;
             color: var(--black3);
             border: 1px solid var(--grey4);
@@ -274,6 +299,23 @@
 
         label {
             color: var(--black5);
+        }
+
+        .radio-cont-div {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            .radio-options-cont {
+                display: flex;
+                align-items: center;
+                gap: 3px;
+
+                p {
+                    color: var(--nuetral13);
+                    font-size: 14px;
+                }
+            }
         }
     }
 
@@ -306,19 +348,40 @@
     background: var(--black3);
 
     .field-item-div {
-        input {
+
+        select,
+        input,
+        textarea {
             background: var(--nuetral13) !important;
             color: var(--grey4);
             border-width: 0px;
             border-color: var(--nuetral13);
         }
 
-        input::placeholder {
+        input::placeholder,
+        textarea::placeholder {
             color: var(--grey3);
         }
 
         label {
             color: var(--white1);
+        }
+
+        .radio-cont-div {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            .radio-options-cont {
+                display: flex;
+                align-items: center;
+                gap: 3px;
+
+                p {
+                    color: var(--grey3);
+                    font-size: 14px;
+                }
+            }
         }
     }
 
