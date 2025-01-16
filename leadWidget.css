@@ -96,7 +96,6 @@
     overflow: auto;
     flex-direction: column;
 
-
     .fields-Cont {
         display: flex;
         width: 100%;
@@ -134,17 +133,6 @@
                     margin-top: 10px;
                 }
             }
-        }
-    }
-
-    .flexbox {
-        display: flex;
-        align-items: center;
-        margin-top: 10px;
-
-        .checkbox {
-            width: 15%;
-            margin-top: 0 !important;
         }
     }
 
@@ -213,17 +201,11 @@
 
     }
 
-    /* .custom-file-upload label:hover {
-        background-color: #e3e3e3;
-    } */
-
     .field-item-div {
         position: relative;
         overflow: hidden;
         font-family: var(--inter);
         width: 49%;
-
-        /* flex-grow: 1; */
 
         select,
         input,
