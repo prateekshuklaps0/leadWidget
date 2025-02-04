@@ -1,1 +1,1 @@
-class LoadWidget{constructor(t){this.widgetId=t;const o=new URLSearchParams(window.location.search),e=document.getElementById(t);let c="http://localhost:7001/widget/";c+=t,o.toString()&&(c+="?"+o.toString()),e.src=c}}
+class LoadWidget{constructor(t){this.widgetId=t;const o=new URLSearchParams(window.location.search),e=document.getElementById(t);if(!e)return console.warn(`Could'nt load iframe with id ${t}`);let n="http://localhost:7001/widget/";n+=t,o.toString()&&(n+="?"+o.toString()),e.src=n}}
