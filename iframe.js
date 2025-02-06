@@ -1,1 +1,1 @@
-class LoadWidget{constructor(t){this.widgetId=t;const o=new URLSearchParams(window.location.search),e=document.getElementById(t);if(!e)return console.warn(`Couldn't load iframe with id : '${t}'`);let n=`https://lead.mastersunion.org/${t}`;o.toString()&&(n+="?"+o.toString()),e.src=n}}
+class LoadWidget{constructor(t){this.widgetId=t;const o=new URLSearchParams(window.location.search),e=document.getElementById(t);if(!e)return console.warn(`Couldn't load iframe with id : '${t}'`);let n=`https://lead.mastersunion.org/widget/${t}`;o.toString()&&(n+="?"+o.toString()),e.src=n}}
