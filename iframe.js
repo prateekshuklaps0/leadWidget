@@ -5,7 +5,7 @@ class LoadWidget {
         if (!iframe) return console.warn(`Couldn't load iframe with id : '${widgetId}'`);
         iframe.setAttribute("frameBorder", "0")
         // let iFrameSrc = `https://lead.mastersunion.org/widget/${widgetId}`;
-        let iFrameSrc = `http://localhost:7001/${widgetId}`;
+        let iFrameSrc = `http://localhost:7001/widget/${widgetId}`;
         if (urlParams.toString()) {
             iFrameSrc += "?" + urlParams.toString();
         }
