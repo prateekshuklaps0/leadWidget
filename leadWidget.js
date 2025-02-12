@@ -7,8 +7,8 @@ class LoadWidget {
                 return;
             }
             iframe.setAttribute("frameBorder", "0");
-            let iFrameSrc = `https://lead.mastersunion.org/widget/${widgetId}`;
-            // let iFrameSrc = `http://localhost:7001/widget/${widgetId}`;
+            // let iFrameSrc = `https://lead.mastersunion.org/widget/${widgetId}`;
+            let iFrameSrc = `http://localhost:7001/widget/${widgetId}`;
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.toString()) {
                 iFrameSrc += "?" + urlParams.toString();
