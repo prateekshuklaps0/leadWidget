@@ -30,8 +30,8 @@ class LoadWidget {
         urlParams.append("parentReferrer", document.referrer || window.location.href || "");
 
         iframe.setAttribute("sandbox", "allow-same-origin allow-scripts allow-forms allow-popups");
-        // iframe.src = `${iFrameSrc}?${urlParams.toString()}`;
-        iframe.srcdoc = `${iFrameSrc}?${urlParams.toString()}`;
+        iframe.src = `${iFrameSrc}?${urlParams.toString()}`;
+        // iframe.srcdoc = `${iFrameSrc}?${urlParams.toString()}`;
     }
 
     handleMessage(event) {
